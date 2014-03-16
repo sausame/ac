@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -123,12 +122,7 @@ public class MainActivity extends Activity {
         mTimeButton.setText(new StringBuilder().append(pad(mHour)).append(":")
                 .append(pad(mMinute)));
 
-        mDate.setDate(mDay);
-        mDate.setHours(mHour);
-        mDate.setMinutes(mMinute);
-        mDate.setMonth(mMonth);
-        mDate.setSeconds(0);
-        mDate.setYear(mYear);
+		mDate = SimpleDateTime.getDate(mYear, mMonth, mDay, mHour, mMinute);
     }
 
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -184,10 +178,10 @@ public class MainActivity extends Activity {
         String sentence2 = AutoCaption.generateSentenceWithDateEventVenuePerson(this, mDate, event, venue,
                 persons);
 
-        Log.v("oooooo", "Date: " + mDate);
-        Log.v("oooooo", "Event: " + event);
-        Log.v("oooooo", "Venue: " + venue.type + ", " + venue.value);
-        Log.v("oooooo", "Person: " + personNameStr);
+        Log.v("Date: " + mDate);
+        Log.v("Event: " + event);
+        Log.v("Venue: " + venue.type + ", " + venue.value);
+        Log.v("Person: " + personNameStr);
 
         mSentence1TextView.setText(sentence1);
         mSentence2TextView.setText(sentence2);

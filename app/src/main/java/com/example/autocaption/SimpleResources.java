@@ -2,12 +2,13 @@ package com.example.autocaption;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 
 public class SimpleResources {
 
     public static String getStringValue(Context ctx, int arrayResId, int index) {
         String[] values = ctx.getResources().getStringArray(arrayResId);
-        if (index >= 0 && index < values.length && !values[index].isEmpty()) {
+        if (index >= 0 && index < values.length && !TextUtils.isEmpty(values[index])) {
             return values[index];
         }
 

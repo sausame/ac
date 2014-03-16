@@ -7,6 +7,14 @@ import java.util.GregorianCalendar;
 
 public class SimpleDateTime {
 
+    public static Date getDate(int year, int month, int day, int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(year, month, day, hour, minute);
+
+		return calendar.getTime();
+    }
+
     public static int compareDate(Date date1, Date date2) {
         Calendar calendar = Calendar.getInstance();
 
@@ -27,14 +35,35 @@ public class SimpleDateTime {
     }
 
     public static int compareToday(Date date) {
-        return compareDate(date, new Date());
+        return compareDate(new Date(), date);
     }
+
+    public static int getDayInWeek(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return calendar.get(Calendar.DAY_OF_WEEK) - 1;
+	}
+
+    public static int getTodayInWeek() {
+        return getDayInWeek(new Date());
+	}
+
+    public static int compareFirstDayInThisWeek(Date date) {
+        int diff = compareToday(date);
+		int dayInWeek = getTodayInWeek();
+
+		return (diff + dayInWeek);
+	}
 
     public static int compareFirstDayInLastWeek(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
-        calendar.set(Calendar.DAY_OF_WEEK, 1);
+        calendar.set(Calendar.DAY_OF_WEEK, 1); // This sunday.
+        calendar.add(Calendar.DATE, -1);
+        calendar.set(Calendar.DAY_OF_WEEK, 1); // Last sunday.
+
         int day1 = calendar.get(Calendar.DAY_OF_YEAR);
 
         calendar.setTime(date);

@@ -1,6 +1,7 @@
 package com.example.autocaption;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import java.util.Date;
 
@@ -15,9 +16,7 @@ public class AutoCaption {
     private Venue mVenue;
     private Person[] mPersons;
 
-    private String mDateBriefString;
-    private String mDateString;
-    private String mTimeString;
+    private String mDateTimeString;
     private String mEventString;
     private String mVenueTypeString;
     private String mVenueValueString;
@@ -53,45 +52,63 @@ public class AutoCaption {
         return this;
     }
 
-    private void generateBriefDate() {
+    private String generateBriefDate() {
+		String briefString;
+
         // 1. Check the named days.
         int diff = SimpleDateTime.compareToday(mDate);
 
-        mDateBriefString = SimpleResources.getStringValue(mCtx,
+        briefString = SimpleResources.getStringValue(mCtx,
                 R.array.named_days_string_values, -1 * diff);
-        if (mDateBriefString != null && !mDateBriefString.isEmpty()) {
-            return;
+		if (!TextUtils.isEmpty(briefString)) {
+            return briefString;
         }
 
         // 2. Check if it's in this week
-        diff = SimpleDateTime.compareFirstDayInLastWeek(mDate);
+        diff = SimpleDateTime.compareFirstDayInThisWeek(mDate);
 
-        mDateBriefString = SimpleResources.getStringValue(mCtx,
+        briefString = SimpleResources.getStringValue(mCtx,
                 R.array.days_in_week_string_values, diff);
-        if (mDateBriefString != null && !mDateBriefString.isEmpty()) {
-            return;
+		if (!TextUtils.isEmpty(briefString)) {
+            return briefString;
         }
 
         // 3. Check if it's in the last week.
-        mDateBriefString = SimpleResources.getStringValue(mCtx,
-                R.array.days_in_last_week_string_values, -1 * diff);
-        if (mDateBriefString != null && !mDateBriefString.isEmpty()) {
-            return;
-        }
+        diff = SimpleDateTime.compareFirstDayInLastWeek(mDate);
+
+        briefString = SimpleResources.getStringValue(mCtx,
+                R.array.days_in_last_week_string_values, diff);
+		if (!TextUtils.isEmpty(briefString)) {
+            return briefString;
+		}
 
         // 4. Others.
-        // Do nothing.
+		return null;
     }
 
-    private void generateDate() {
-        mDateString = SimpleDateTime.getDayString(mDate);
+    private String generateDate() {
+        return SimpleDateTime.getDayString(mDate);
     }
 
-    private void generateTime() {
+    private String generateTime() {
         int hour = SimpleDateTime.getHourOfDay(mDate);
-        int index = SimpleResources.getIndexByValue(mCtx, R.array.hour_values,
+        int index = SimpleResources.getIndexByValue(mCtx, R.array.hour_indexs,
                 hour);
-        mTimeString = SimpleResources.getStringValue(mCtx, R.array.hour_values, index);
+        return SimpleResources.getStringValue(mCtx, R.array.hour_values, index);
+    }
+
+    private void generateDateTime() {
+        String briefString = generateBriefDate();
+        String dateString = generateDate();
+        String timeString = generateTime();
+
+		if (TextUtils.isEmpty(briefString)) {
+			mDateTimeString = SimpleResources.getResources(mCtx).getString(R.string.date_piece,
+						dateString);
+		} else {
+			mDateTimeString = SimpleResources.getResources(mCtx).getString(R.string.date_piece_with_brief_date,
+					briefString, timeString, dateString);
+		}
     }
 
     private void generateEvent() {
@@ -164,20 +181,15 @@ public class AutoCaption {
     }
 
     private String generateSentenceWithDateOnly() {
-        generateBriefDate();
-        generateDate();
-        generateTime();
+		generateDateTime();
 
-        return SimpleResources.getResources(mCtx).getString(R.string.date_piece,
-                mDateBriefString, mTimeString, mDateString);
+		return mDateTimeString;
     }
 
     private String generateSentenceWithDateEventVenuePerson() {
         String sentence;
 
-        generateBriefDate();
-        generateDate();
-        generateTime();
+        generateDateTime();
         generateEvent();
         generateVenue();
         generatePersons();
@@ -206,8 +218,7 @@ public class AutoCaption {
                 break;
         }
 
-        return SimpleResources.getResources(mCtx).getString(R.string.date_piece,
-                mDateBriefString, mTimeString, mDateString);
+        return mPersonsString;
     }
 
     public static String generateSentenceWithDateOnly(Context ctx, Date date) {
