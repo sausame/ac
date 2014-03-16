@@ -15,7 +15,21 @@
  -->
 
 <resources>
-    <string-array name="named_days_string_values">
+    <string-array name="upper_named_dates_string_values">
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>The day before yesterday</item>
+        <item>The bigger day before yesterday</item>
+    </string-array>
+
+    <string-array name="lower_named_dates_string_values">
+        <item>today</item>
+        <item>yesterday</item>
+        <item>the day before yesterday</item>
+        <item>the bigger day before yesterday</item>
+    </string-array>
+
+    <string-array name="named_dates_string_values">
         <item>@string/today</item>
         <item>@string/yesterday</item>
         <item>the day before yesterday</item>
@@ -65,6 +79,49 @@
     <string-array name="venue_types_string_values">
         <item>In</item>
         <item>At</item>
+    </string-array>
+
+	<!-- [Date Event Venue Person], each number means the number of each part, and 9 means that the number is not 0 nor in the others number which exist in the list. -->
+    <integer-array name="rule_indexes" translatable="false">
+        <item>1000</item>
+        <item>1100</item>
+        <item>1010</item>
+        <item>1001</item>
+        <item>1002</item>
+        <item>1003</item>
+        <item>1009</item>
+        <item>1110</item>
+        <item>1101</item>
+        <item>1102</item>
+        <item>1103</item>
+        <item>1109</item>
+        <item>1011</item>
+        <item>1012</item>
+        <item>1013</item>
+        <item>1019</item>
+        <item>1111</item>
+        <item>1112</item>
+        <item>1113</item>
+        <item>1114</item>
+    </integer-array>
+
+    <string-array name="date_rules">
+        <item>1000:[UPPER-NAMED-DATE] [TIME] ([DATE])</item>
+        <item>1000:[DATE]</item>
+        <item>1999:on [LOWER-NAMED-DATE] [TIME] ([DATE])</item>
+        <item>1999:on [DATE]</item>
+    </string-array>
+
+    <string-array name="venue_rules">
+        <item>1010:At [VENUS]</item>
+        <item>1010:In [CITY]</item>
+        <item>9919:at [VENUS]</item>
+        <item>9919:in [CITY]</item>
+    </string-array>
+
+    <string-array name="sentence_rules">
+        <item>1000:[DATE-PIECE]</item>
+        <item>1010:[VENUE-PIECE] [DATE-PIECE]</item>
     </string-array>
 
 </resources>
